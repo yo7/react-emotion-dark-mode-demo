@@ -1,19 +1,41 @@
 import * as React from 'react'
 import css from '@emotion/css'
+import { ThemeProvider } from 'emotion-theming'
 
 export const ThemeView: React.FC = () => {
   return (
-    <div
-      css={css`
-        ${baseStyle};
+    <ThemeProvider theme={isDarkMode() ? darkTheme : lightTheme}>
+      <div
+        css={theme => css`
+          ${baseStyle};
 
-        background-color: #fefefe;
-        color: #333;
-      `}
-    >
-      Light Theme
-    </div>
+          background-color: ${theme.bgColor};
+          color: ${theme.textColor};
+        `}
+      >
+        Light Theme
+      </div>
+    </ThemeProvider>
   )
+}
+
+const isDarkMode = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+type Theme = {
+  bgColor: string
+  textColor: string
+}
+
+const lightTheme: Theme = {
+  bgColor: '#fefefe',
+  textColor: '#333',
+}
+
+const darkTheme: Theme = {
+  bgColor: '#222',
+  textColor: '#aaa',
 }
 
 const baseStyle = css`
