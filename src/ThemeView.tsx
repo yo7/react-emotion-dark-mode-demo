@@ -1,50 +1,47 @@
 import * as React from 'react'
 import css from '@emotion/css'
-import { ThemeProvider } from 'emotion-theming'
+import { Theme, useTheme } from './ThemeProvider'
 
 export const ThemeView: React.FC = () => {
-  return (
-    <ThemeProvider theme={isDarkMode() ? darkTheme : lightTheme}>
-      <div
-        css={theme => css`
-          ${baseStyle};
+  const { mode, toggleTheme } = useTheme()
 
-          background-color: ${theme.bgColor};
+  return (
+    <div
+      css={(theme: Theme) => css`
+        position: relative;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        background-color: ${theme.bgColor};
+      `}
+    >
+      <div
+        css={(theme: Theme) => css`
+          font-size: 4rem;
+          font-style: italic;
+          font-family: serif;
+          font-weight: bold;
           color: ${theme.textColor};
         `}
       >
-        Light Theme
+        {mode === 'light' ? 'Light Theme' : 'Dark Theme'}
       </div>
-    </ThemeProvider>
+      <button
+        onClick={toggleTheme}
+        css={css`
+          margin-top: 5rem;
+          font-size: 1.5rem;
+          color: #fff;
+          background-color: #7841e2;
+          padding: 0.5rem;
+          border-radius: 5px;
+        `}
+      >
+        toggle theme!
+      </button>
+    </div>
   )
 }
-
-const isDarkMode = () => {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-}
-
-type Theme = {
-  bgColor: string
-  textColor: string
-}
-
-const lightTheme: Theme = {
-  bgColor: '#fefefe',
-  textColor: '#333',
-}
-
-const darkTheme: Theme = {
-  bgColor: '#222',
-  textColor: '#aaa',
-}
-
-const baseStyle = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  font-size: 4rem;
-  font-style: italic;
-  font-family: serif;
-  font-weight: bold;
-`
